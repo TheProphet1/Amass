@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <addon id="{addonid}" name="{name}" version="{version}" provider-name="{author}">
+        <requires>
+            <import addon="xbmc.addon" version="12.0.0"/>
+        </requires>
+        <extension point="xbmc.addon.repository" name="{name}">
+            <info compressed="false">{url}{output_path}addons.xml</info>
+            <checksum>{url}{output_path}addons.xml.md5</checksum>
+            <datadir zip="true">{url}{output_path}</datadir>
+            <hashes>false</hashes>
+		<dir>
+			<info compressed="false">https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml</info>
+			<checksum>https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml.md5</checksum>
+			<datadir zip="true">https://raw.githubusercontent.com/Gujal00/smrzips/master/zips/</datadir>
+		</dir>			
+			<info compressed="false">https://raw.githubusercontent.com/thecrewwh/zips/master/matrix/_zip/addons.xml</info>
+			<checksum>https://raw.githubusercontent.com/thecrewwh/zips/master//matrix/_zip/addons.xml.md5</checksum>
+			<datadir zip="true">https://raw.githubusercontent.com/thecrewwh/zips/master//matrix/_zip</datadir>
+		</dir>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary>{summary}</summary>
+            <description>{description}</description>
+            <platform>all</platform>
+    </extension>
+</addon>
