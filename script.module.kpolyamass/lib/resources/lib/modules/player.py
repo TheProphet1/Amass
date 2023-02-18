@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
 '''
-    Kpolyamass Add-on
+    Genesis Add-on
+    Copyright (C) 2015 lambda
+
+    -Mofidied by The Crew
+    -Copyright (C) 2019 The Crew
+
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,7 +19,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
 import base64
@@ -32,7 +37,7 @@ import six
 from six.moves import urllib_parse, xmlrpc_client
 
 
-from resources.lib.modules import cleantitle, control, playcount
+from resources.lib.modules import cleantitle, control, playcount, trakt
 
 try:
     from sqlite3 import dbapi2 as database
@@ -337,7 +342,7 @@ class player(xbmc.Player):
         if int(self.currentTime) > 120:
             if control.setting('bookmarks') == 'true':
                 bookmarks().reset(self.currentTime, self.totalTime, self.name, self.year)
-        if control.setting('trakt.scrobble') == 'true':
+            if (trakt.getTraktCredentialsInfo() == True and control.setting('trakt.scrobble') == 'true'):
                 bookmarks().set_scrobble(self.currentTime, self.totalTime, self.content, self.imdb, self.tvdb, self.season, self.episode)
 
         try:

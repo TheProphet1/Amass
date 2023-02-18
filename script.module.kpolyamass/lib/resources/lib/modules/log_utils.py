@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
     tknorris shared module
     Copyright (C) 2016 tknorris
@@ -38,7 +39,7 @@ LOGNOTICE = xbmc.LOGNOTICE if int(control.getKodiVersion()) < 19 else xbmc.LOGIN
 LOGWARNING = xbmc.LOGWARNING
 
 name = control.addonInfo('name')
-DEBUGPREFIX = '[COLOR yellow][ Kpolyamass DEBUG ][/COLOR]'
+DEBUGPREFIX = '[COLOR yellow][ Kpolyamass - DEBUG ][/COLOR]'
 LOGPATH = control.transPath('special://logpath/')
 
 addonName = "Kpolyamass"

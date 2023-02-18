@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
-"""
-    kpolyamass Add-on
+'''
+    Genesis Add-on
+    Copyright (C) 2015 lambda
+
+    -Mofidied by Kpolyamass
+    -Copyright (C) 2022 Kpolyamass
+
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,19 +19,19 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+'''
 
-
+           
 import re
 import time
 import base64
-#import urllib
-#import urlparse
 
-import six
-from six.moves import urllib_parse
-import simplejson as json
+import requests
+import urllib
+from urllib.parse import urljoin, quote_plus
+
+import json
 
 from resources.lib.modules import cache
 from resources.lib.modules import cleandate
@@ -35,10 +40,8 @@ from resources.lib.modules import control
 from resources.lib.modules import log_utils
 from resources.lib.modules import utils
 
-if six.PY2:
-    str = unicode
-elif six.PY3:
-    str = unicode = basestring = str
+str = unicode = basestring = str
+
 BASE_URL = 'https://api.trakt.tv'
 V2_API_KEY = '1e9dc884ff27ac17fb957fef76e7170ca2e3056a6000c849ed9e9e2d92de7854'
 CLIENT_SECRET = '80b5aa9efff2151f6a960501e435c80c3913f9d39d2d0b560f39f6b6c8b11122'
@@ -46,7 +49,7 @@ REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 def __getTrakt(url, post=None):
     try:
-        url = urllib_parse.urljoin(BASE_URL, url)
+        url = urllib.parse.urljoin(BASE_URL, url)
         post = json.dumps(post) if post else None
         headers = {'Content-Type': 'application/json', 'trakt-api-key': V2_API_KEY, 'trakt-api-version': 2}
 
@@ -70,7 +73,7 @@ def __getTrakt(url, post=None):
         if resp_code not in ['401', '405']:
             return result, resp_header
 
-        oauth = urllib_parse.urljoin(BASE_URL, '/oauth/token')
+        oauth = urllib.parse.urljoin(BASE_URL, '/oauth/token')
         opost = {'client_id': V2_API_KEY, 'client_secret': CLIENT_SECRET, 'redirect_uri': REDIRECT_URI, 'grant_type': 'refresh_token', 'refresh_token': control.setting('trakt.refresh')}
 
         result = client.request(oauth, post=json.dumps(opost), headers=headers)
@@ -114,7 +117,7 @@ def authTrakt():
 
         result = getTraktAsJson('/oauth/device/code', {'client_id': V2_API_KEY})
         verification_url = control.lang(32513) % result['verification_url']
-        user_code = six.ensure_text(control.lang(32514) % result['user_code'])
+        user_code = control.lang(32514) % result['user_code']
         expires_in = int(result['expires_in'])
         device_code = result['device_code']
         interval = result['interval']
@@ -148,7 +151,7 @@ def authTrakt():
 
         headers = {'Content-Type': 'application/json', 'trakt-api-key': V2_API_KEY, 'trakt-api-version': 2, 'Authorization': 'Bearer %s' % token}
 
-        result = client.request(urllib_parse.urljoin(BASE_URL, '/users/me'), headers=headers)
+        result = client.request(urllib.parse.urljoin(BASE_URL, '/users/me'), headers=headers)
         result = utils.json_loads_as_str(result)
 
         user = result['username']
@@ -228,10 +231,10 @@ def manager(name, imdb, tvdb, content):
         lists = [lists[i//2] for i in list(range(len(lists)*2))]
 
         for i in list(range(0, len(lists), 2)):
-            lists[i] = ((six.ensure_str(control.lang(32521) % lists[i][0])), '/users/me/lists/%s/items' % lists[i][1])
+            lists[i] = ((control.lang(32521) % lists[i][0]), '/users/me/lists/%s/items' % lists[i][1])
 
         for i in list(range(1, len(lists), 2)):
-            lists[i] = ((six.ensure_str(control.lang(32522) % lists[i][0])), '/users/me/lists/%s/items/remove' % lists[i][1])
+            lists[i] = ((control.lang(32522) % lists[i][0]), '/users/me/lists/%s/items/remove' % lists[i][1])
         items += lists
 
         select = control.selectDialog([i[0] for i in items], control.lang(32515))
@@ -248,7 +251,7 @@ def manager(name, imdb, tvdb, content):
             result = __getTrakt('/users/me/lists', post={"name": new, "privacy": "private"})[0]
 
             try: slug = utils.json_loads_as_str(result)['ids']['slug']
-            except: return control.infoDialog(six.ensure_str(control.lang(32515)), heading=str(name), sound=True, icon='ERROR')
+            except: return control.infoDialog(control.lang(32515), heading=str(name), sound=True, icon='ERROR')
                                                
             result = __getTrakt(items[select][1] % slug, post=post)[0]
         else:
@@ -256,7 +259,7 @@ def manager(name, imdb, tvdb, content):
 
         icon = control.infoLabel('ListItem.Icon') if not result == None else 'ERROR'
 
-        control.infoDialog(six.ensure_str(control.lang(32515)), heading=str(name), sound=True, icon=icon)
+        control.infoDialog(control.lang(32515), heading=str(name), sound=True, icon=icon)
     except:
         return
 
@@ -266,6 +269,8 @@ def slug(name):
     name = name.lower()
     name = re.sub('[^a-z0-9_]', '-', name)
     name = re.sub('--+', '-', name)
+    if name.endswith('-'):
+        name = name.rstrip('-')
     return name
 
 
@@ -494,7 +499,7 @@ def SearchAll(title, year, full=True):
 
 def SearchMovie(title, year, full=True):
     try:
-        url = '/search/movie?query=%s' % urllib_parse.quote_plus(title)
+        url = '/search/movie?query=%s' % urllib.parse.quote_plus(title)
 
         if year:
             url += '&year=%s' % year
@@ -507,7 +512,7 @@ def SearchMovie(title, year, full=True):
 
 def SearchTVShow(title, year, full=True):
     try:
-        url = '/search/show?query=%s' % urllib_parse.quote_plus(title)
+        url = '/search/show?query=%s' % urllib.parse.quote_plus(title)
 
         if year:
             url += '&year=%s' % year
@@ -536,13 +541,20 @@ def getGenre(content, type, type_id):
         return []
 
 
+#def getEpisodeRating(imdb, season, episode):
+#    try:
+#        if not imdb.startswith('tt'): imdb = 'tt' + imdb
+#        url = '/shows/%s/seasons/%s/episodes/%s/ratings' % (imdb, season, episode)
+#        r = getTraktAsJson(url)
+#        r1 = r.get('rating', '0')
+#        r2 = r.get('votes', '0')
+#        return str(r1), str(r2)
+#    except:
+#        return
+
+# Classy - 29-10-2022: dirty temp fix for ratings and trakt
 def getEpisodeRating(imdb, season, episode):
     try:
-        if not imdb.startswith('tt'): imdb = 'tt' + imdb
-        url = '/shows/%s/seasons/%s/episodes/%s/ratings' % (imdb, season, episode)
-        r = getTraktAsJson(url)
-        r1 = r.get('rating', '0')
-        r2 = r.get('votes', '0')
-        return str(r1), str(r2)
+        return '0','0'
     except:
         return
