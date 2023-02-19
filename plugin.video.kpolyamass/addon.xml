@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.kpolyamass" version="1.0.0" name="Kpolyamass" provider-name="The Prophet">
 	<requires>
-		<!--<import addon="xbmc.python" version="2.25.0" />-->
+		<!--<import addon="xbmc.python" version="3.0.0" />-->
 		<import addon="script.module.kpolyamass" />
 		<import addon="script.kpolyamass.artwork" />
 		<import addon="script.kpolyamass.metadata" />
