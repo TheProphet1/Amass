@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <addon id="repository.amass" name="Amass Repo" version="1.0.1" provider-name="The Prophet">
+    <addon id="repository.amass" name="Amass Repo" version="1.0.2" provider-name="The Prophet">
         <requires>
             <import addon="xbmc.addon" version="12.0.0"/>
         </requires>
         <extension point="xbmc.addon.repository" name="Amass Repo">
+            <dir minversion="18.9.9">
             <info compressed="false">https://raw.githubusercontent.com/TheProphet1/Amass/main/_repo/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/TheProphet1/Amass/main/_repo/addons.xml.md5</checksum>
             <datadir zip="true">https://raw.githubusercontent.com/TheProphet1/Amass/main/_repo/</datadir>
             <hashes>false</hashes>
+            </dir>
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/Gujal00/smrzips/master/addons.xml.md5</checksum>
