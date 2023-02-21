@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-    **Created by Tempest** Converted for 19 Crew
+    **Created by Tempest**
     **If you see this in a addon other than Tempest and says it was
     created by someone other than Tempest they stole it from me**
 """
 
-import re,base64
-from resources.lib.modules import client, source_utils
-
+import re, base64
+import traceback
+from resources.lib.modules import log_utils
+from resources.lib.modules import client
 try: from urlparse import parse_qs, urljoin
 except ImportError: from urllib.parse import parse_qs, urljoin
 try: from urllib import urlencode, quote_plus
 except ImportError: from urllib.parse import urlencode, quote_plus
-
 
 class source:
     def __init__(self):
@@ -47,17 +47,16 @@ class source:
             url = urljoin(self.base_link, url)
             try:
                 url = client.request(url, headers=self.headers)
-                print('DBGO_URL', url)
-                url = re.findall('file:"#2(.*?)"', url)[0]
-                url = re.sub(r'\/\/\w{8}',"",url)
+                url = re.findall('file:"#2(.*?)"', url)[0].replace('//eS95L3kv', '').replace('//ei96L3ov', '').replace('//eC94L3gv', '')
                 url = base64.b64decode(url).decode('utf-8') + '|Referer=https://cdn.dbgo.fun/'
-                quality = source_utils.check_direct_url(url)
-                sources.append({'source': 'CDN', 'quality': quality, 'language': 'en', 'url': url, 'direct': False, 'debridonly': False})
+                sources.append({'source': 'CDN', 'quality': '720p', 'language': 'en', 'url': url, 'direct': False, 'debridonly': False})
             except:
                 pass
 
             return sources
         except Exception:
+            failure = traceback.format_exc()
+            log_utils.log('---DBGO Testing - Exception: \n' + str(failure))
             return sources
 
     def resolve(self, url):

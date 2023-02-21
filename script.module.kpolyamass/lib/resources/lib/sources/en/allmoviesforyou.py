@@ -21,7 +21,7 @@ class source:
         self.priority = 1
         self.language = ['en']
         self.domains = ['allmoviesforyou.co']
-        self.base_link = 'https://allmoviesforyou.co'
+        self.base_link = 'https://allmoviesforyou.net'
         self.search_link = '/?s=%s'
         self.search_link2 = '/embed/tmdb/tv?id=%s&s=%s&e=%s'
         self.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0', 'Referer': self.base_link}

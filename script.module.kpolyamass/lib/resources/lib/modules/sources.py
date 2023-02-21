@@ -606,9 +606,9 @@ class sources:
                                 break
                             percent = int(100 * float(i) / (2 * timeout) + 0.5) % 100
                             if not progressDialog == control.progressDialogBG:
-                                progressDialog.update(max(1, percent), line1 + line2 + line3)
+                                progressDialog.update(max(1, percent), line1 + '\n' +  line2 + '\n' +  line3)
                             else:
-                                progressDialog.update(max(1, percent), line1 + line3)
+                                progressDialog.update(max(1, percent), line1 + '\n' + line3)
                         else:
                             if len(info) > 6:
                                 line2 = 'Waiting for: %s' % (str(len(info)))

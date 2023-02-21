@@ -36,8 +36,7 @@ class source:
         self.language = ['en']
         self.domains = ['scene-rls.com', 'scene-rls.net']
         self.base_link = 'http://scene-rls.net'
-        self.search_link = '/?s=%s'
-        self.scraper = cfscrape.create_scraper()
+        self.search_link = '/?s=%s&submit=Find'
 
     def movie(self, imdb, title, localtitle, aliases, year):
         try:
@@ -95,7 +94,7 @@ class source:
                 url = self.search_link % quote_plus(query)
                 url = urljoin(self.base_link, url)
 
-                r = self.scraper.get(url).content
+                r = client.request(url)
                 r = ensure_text(r, errors='replace')
 
                 posts = client.parseDOM(r, 'div', attrs={'class': 'post'})

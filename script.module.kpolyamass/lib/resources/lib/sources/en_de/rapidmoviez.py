@@ -30,7 +30,7 @@ from resources.lib.modules import client
 from resources.lib.modules import debrid
 from resources.lib.modules import source_utils
 from resources.lib.modules import workers
-from resources.lib.modules import cfscrape
+#from resources.lib.modules import cfscrape
 
 
 
@@ -42,7 +42,7 @@ class source:
         self.domains = ['rmz.cr']
         self.base_link = 'https://rmz.cr'
         self.search_link = '/search/%s'
-        self.scraper = cfscrape.create_scraper()
+        #self.scraper = cfscrape.create_scraper()
 
     def movie(self, imdb, title, localtitle, aliases, year):
         try:
@@ -75,8 +75,8 @@ class source:
     def search(self, title, year):
         try:
             url = urljoin(self.base_link, self.search_link % (quote_plus(title)))
-            headers = {'User-Agent': client.agent()}
-            r = self.scraper.get(url, headers=headers).content
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'}
+            r = client.request(url, headers=headers)
             r = ensure_text(r, errors='replace')
             r = dom_parser2.parse_dom(r, 'div', {'class': 'list_items'})[0]
             r = dom_parser2.parse_dom(r.content, 'li')
@@ -110,8 +110,8 @@ class source:
             imdb = data['imdb']
 
             url = self.search(title, hdlr)
-            headers = {'User-Agent': client.agent()}
-            r = self.scraper.get(url, headers=headers).content
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'}
+            r = client.request(url, headers=headers)
             r = ensure_text(r, errors='replace')
             if hdlr2 == '':
                 r = dom_parser2.parse_dom(r, 'ul', {'id': 'releases'})[0]
@@ -139,8 +139,8 @@ class source:
           
     def _get_sources(self, name, url):
         try:
-            headers = {'User-Agent': client.agent()}
-            r = self.scraper.get(url, headers=headers).content
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0'}
+            r = client.request(url, headers=headers)
             r = ensure_text(r, errors='replace')
             name = client.replaceHTMLCodes(name)
             try: _name = name.lower().replace('rr', '').replace('nf', '').replace('ul', '').replace('cu', '')
@@ -159,16 +159,18 @@ class source:
                 if not valid:
                     continue
                 host = client.replaceHTMLCodes(host)
-                #host = host.encode('utf-8')
+                host = host.encode('utf-8')
                 quality, info = source_utils.get_release_quality(name, url)
                 try:
                     size = re.findall('((?:\d+\.\d+|\d+\,\d+|\d+)\s*(?:GiB|MiB|GB|MB))', name)[0]
-                    dsize, isize = source_utils._size(size)
+                    div = 1 if size.endswith(('GB', 'GiB')) else 1024
+                    size = float(re.sub('[^0-9|/.|/,]', '', size)) / div
+                    size = '%.2f GB' % size
+                    info.append(size)
                 except BaseException:
-                    dsize, isize = 0.0, ''
-                info.insert(0, isize)
+                    pass
                 info = ' | '.join(info)
-                self.sources.append({'source': host, 'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'size': dsize, 'name': _name})
+                self.sources.append({'source': host, 'quality': quality, 'language': 'en', 'url': url, 'info': info, 'direct': False, 'debridonly': True, 'name': _name})
         except:
             pass
 

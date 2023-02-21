@@ -26,7 +26,7 @@
 
 <addon id="plugin.video.kpolyamass" version="1.0.0" name="Kpolyamass" provider-name="The Prophet">
 	<requires>
-		<!--<import addon="xbmc.python" version="3.0.0" />-->
+		<!--<import addon="xbmc.python" version="2.25.0" />-->
 		<import addon="script.module.kpolyamass" />
 		<import addon="script.kpolyamass.artwork" />
 		<import addon="script.kpolyamass.metadata" />
@@ -117,7 +117,7 @@
 
 <addon id="script.kpolyamass.artwork" version="1.0.0" name="Kpolyamass Artwork" provider-name="The Prophet">
 	<requires>
-		<!--<import addon="xbmc.python" version="3.0.0" />-->
+		<!--<import addon="xbmc.python" version="2.25.0" />-->
 	</requires>
 	<extension point="xbmc.python.module" library="lib" />
 	<extension point="xbmc.addon.metadata">
@@ -129,7 +129,7 @@
 
 <addon id="script.kpolyamass.metadata" version="1.0.0" name="Kpolyamass Metadata" provider-name="The Prophet">
 	<requires>
-		<!--<import addon="xbmc.python" version="3.0.0" />-->
+		<!--<import addon="xbmc.python" version="2.25.0" />-->
 	</requires>
 	<extension point="xbmc.python.module" library="lib" />
 	<extension point="xbmc.addon.metadata">
@@ -139,9 +139,9 @@
 	</extension>
 </addon>
 
-<addon id="script.module.kpolyamass" name="Kpolyamass Module" version="1.0.0" provider-name="The Prophet">
+<addon id="script.module.kpolyamass" name="Kpolyamass Module" version="1.0.1" provider-name="The Prophet">
 	<requires>
-		<!--<import addon="xbmc.python" version="3.0.0" />-->
+		<!--<import addon="xbmc.python" version="2.25.0" />-->
         <import addon="script.module.beautifulsoup4"/>
 	</requires>
 	<extension point="xbmc.python.module" library="lib" />
